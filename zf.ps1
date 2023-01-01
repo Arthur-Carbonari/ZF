@@ -29,7 +29,7 @@ if ($args -contains "file"){
     $args = $args | Where-Object {$_ -ne "file"}
 }
 
-$selectedFolder = ($foldersSet | fzf @args)
+$selectedFolder = ($foldersSet | fzf $args)
 
 if(!$selectedFolder){
     exit

@@ -30,11 +30,11 @@ $foldersSet = [System.Collections.Generic.HashSet[string]]@($rootFolders)
 
 $rootFolders | ForEach-Object {Get-ChildItem $_ -Directory} | Select-Object FullName | ForEach-Object {$foldersSet.Add($_.FullName) | Out-Null}
 
-if ($args -contains "file"){
+if ($args -contains "-file"){
     $filesPath = @()
     $foldersSet | ForEach-Object {Get-ChildItem $_ -File} | Select-Object FullName | ForEach-Object {$filesPath += $_.FullName}
     $filesPath | ForEach-Object {$foldersSet.Add($_) | Out-Null}
-    $args = $args | Where-Object {$_ -ne "file"}
+    $args = $args | Where-Object {$_ -ne "-file"}
 }
 
 if ($args -contains "ls"){

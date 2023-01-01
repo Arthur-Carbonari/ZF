@@ -41,6 +41,19 @@ if ($args -contains "ls"){
     return $foldersSet
 }
 
+# Integration with z
+
+# Gets the path to .cdHistory folder
+$safehome = if ([String]::IsNullOrWhiteSpace($Env:HOME)) { $env:USERPROFILE } else { $Env:HOME } 
+$cdHistory = Join-Path -Path $safehome -ChildPath '\.cdHistory'
+
+# Get cdHistory and add it to folder set
+if ((Test-Path -Path $cdHistory)) {
+  Get-Content -Path $cdHistory -Encoding UTF8 | ? { (-not [String]::IsNullOrWhiteSpace($_)) } | ForEach-Object {$foldersSet.Add($_.Substring(25)) | Out-Null}
+}
+
+# =============================================
+
 $selectedFolder = ($foldersSet | fzf $args)
 
 if(!$selectedFolder){

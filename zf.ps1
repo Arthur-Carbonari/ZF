@@ -14,6 +14,18 @@ if ($args -contains "add"){
     return
 }
 
+if ($args -contains "rmv"){
+    $cwd = (Get-Location).Path
+
+    if ($cwd -notin $rootFolders){
+        return
+    }
+
+    $rootFolders = $rootFolders | Where-Object { $_ -ne $cwd }
+    $rootFolders | Out-File $myFoldersPath
+    return
+}
+
 $foldersSet = [System.Collections.Generic.HashSet[string]]@($rootFolders)
 
 $rootFolders | ForEach-Object {Get-ChildItem $_ -Directory} | Select-Object FullName | ForEach-Object {$foldersSet.Add($_.FullName) | Out-Null}
